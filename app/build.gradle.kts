@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -6,11 +8,18 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+val omdbApiKey: String = localProperties.getProperty("OMDB_API_KEY") ?: ""
+
 android {
     namespace = "com.omero.cleanmovieapp"
     compileSdk {
         version = release(37)
     }
+
 
     defaultConfig {
         applicationId = "com.omero.cleanmovieapp"
@@ -20,6 +29,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "OMDB_API_KEY", "\"$omdbApiKey\"")
+        buildConfigField("String", "BASE_URL", "\"https://www.omdbapi.com/\"")
     }
 
     buildTypes {
@@ -35,6 +47,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
