@@ -55,7 +55,9 @@ data class MovieDetailDTO(
     @SerialName("Writer")
     val writer: String? = null,
     @SerialName("Year")
-    val year: String? = null
+    val year: String? = null,
+    @SerialName("Error")
+    val error: String? = null
 )
 
 @Serializable

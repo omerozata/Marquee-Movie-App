@@ -9,4 +9,4 @@ import kotlinx.coroutines.flow.onStart
 fun <T> Flow<T>.asResource(): Flow<Resource<T>> = this
     .map<T, Resource<T>> { Resource.Success(it) }
     .onStart { emit(Resource.Loading) }
-    .catch { emit(Resource.Error(it)) }
+    .catch { emit(Resource.Error(it.toAppError())) }

@@ -16,7 +16,7 @@ class MovieRepositoryImpl @Inject constructor(
         val dto = api.getMovies(search)
 
         if (dto.response != "True") {
-            throw IllegalStateException("Film bulunamadı")
+            throw IllegalStateException(dto.error ?: "Film bulunamadı")
         }
         return dto.toMovieList()
     }
@@ -25,7 +25,7 @@ class MovieRepositoryImpl @Inject constructor(
         val dto = api.getMovieDetails(id)
 
         if (dto.response != "True") {
-            throw IllegalStateException("Film bilgisi alınamadı")
+            throw IllegalStateException(dto.error ?: "Film bilgisi alınamadı")
         }
         return dto.toMovieDetailOrNull() ?: throw IllegalStateException("Film bilgisi eksik")
     }

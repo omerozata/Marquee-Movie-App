@@ -12,7 +12,9 @@ data class MoviesDTO(
     @SerialName("Search")
     val search: List<SearchItemDTO>? = null,
     @SerialName("totalResults")
-    val totalResults: String? = null
+    val totalResults: String? = null,
+    @SerialName("Error")
+    val error: String? = null
 )
 
 @Serializable
