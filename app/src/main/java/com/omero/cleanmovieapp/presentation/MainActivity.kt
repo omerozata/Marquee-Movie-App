@@ -7,10 +7,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import com.omero.cleanmovieapp.presentation.navigation.AppNavHost
 import com.omero.cleanmovieapp.presentation.theme.CleanMovieAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,24 +22,15 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
         setContent {
             CleanMovieAppTheme {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-
-                    Text(
-                        text = "Hello World",
-                        fontSize = 23.sp
-
-                    )
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    AppNavHost(modifier = Modifier.padding(innerPadding))
                 }
+             }
 
-            }
             }
         }
     }
