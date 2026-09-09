@@ -1,4 +1,4 @@
-package com.omero.cleanmovieapp.presentation.home
+package com.omero.cleanmovieapp.presentation.components
 
 import androidx.compose.ui.graphics.Color
 import kotlin.math.abs

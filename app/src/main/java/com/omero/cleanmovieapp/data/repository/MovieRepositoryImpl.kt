@@ -1,5 +1,6 @@
 package com.omero.cleanmovieapp.data.repository
 
+import com.omero.cleanmovieapp.common.ApiException
 import com.omero.cleanmovieapp.data.remote.MoviesAPI
 import com.omero.cleanmovieapp.data.remote.dto.toMovieDetailOrNull
 import com.omero.cleanmovieapp.data.remote.dto.toMovieList
@@ -16,7 +17,7 @@ class MovieRepositoryImpl @Inject constructor(
         val dto = api.getMovies(search)
 
         if (dto.response != "True") {
-            throw IllegalStateException(dto.error ?: "Film bulunamadı")
+            throw ApiException(dto.error ?: "Film bulunamadı")
         }
         return dto.toMovieList()
     }
@@ -25,8 +26,8 @@ class MovieRepositoryImpl @Inject constructor(
         val dto = api.getMovieDetails(id)
 
         if (dto.response != "True") {
-            throw IllegalStateException(dto.error ?: "Film bilgisi alınamadı")
+            throw ApiException(dto.error ?: "Film bilgisi alınamadı")
         }
-        return dto.toMovieDetailOrNull() ?: throw IllegalStateException("Film bilgisi eksik")
+        return dto.toMovieDetailOrNull() ?: throw ApiException("Film bilgisi eksik")
     }
 }
