@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.compose.SubcomposeAsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.omero.cleanmovieapp.domain.model.Movie
@@ -49,29 +50,38 @@ fun MovieRow(
                 modifier = Modifier
                     .size(width = 100.dp, height = 150.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(
-                        if (movie.poster != null) MaterialTheme.colorScheme.inverseOnSurface
-                        else placeHolderColorFor(movie.title)
-                    ),
+                    .background(placeHolderColorFor(movie.title)),
                 contentAlignment = Alignment.Center
             ) {
-                if (movie.poster != null) {
-                    AsyncImage(
+
+                val fallBack = @Composable {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = movie.title.take(1).uppercase(),
+                            style = MaterialTheme.typography.displaySmall,
+                            color = Color.White.copy(alpha = 0.9f)
+                        )
+                    }
+                                   }
+
+                if (movie.poster == null) {
+                    fallBack()
+                } else {
+                    SubcomposeAsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(movie.poster)
                             .crossfade(true)
                             .build(),
                         contentDescription = movie.title,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else {
-                    Text(
-                        text = movie.title.take(1).uppercase(),
-                        style = MaterialTheme.typography.displaySmall,
-                        color = Color.White.copy(alpha = 0.9f)
+                        modifier = Modifier.fillMaxSize(),
+                        error = {fallBack()}
                     )
                 }
+
             }
 
             Spacer(modifier = Modifier.width(12.dp))
