@@ -26,7 +26,7 @@ class HomeViewModel @Inject constructor(
     private var job: Job? = null
 
     private companion object {
-        const val DEFAULT_QUERY = "Fifty Shades of Grey"
+        const val DEFAULT_QUERY = "Harry Potter"
     }
 
     init {
