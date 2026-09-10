@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,49 +51,52 @@ private fun HomeContent(
     modifier: Modifier = Modifier
 ) {
 
-    Column(modifier = modifier.fillMaxSize()) {
+    Scaffold(modifier = modifier.fillMaxSize()) {padding ->
+        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
 
-        SearchBar(
-            query = state.search,
-            onQueryChange = {onEvent(HomeEvent.SearchQueryChanged(it))},
-            onSearch = {onEvent(HomeEvent.SearchSubmitted)},
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        )
+            SearchBar(
+                query = state.search,
+                onQueryChange = {onEvent(HomeEvent.SearchQueryChanged(it))},
+                onSearch = {onEvent(HomeEvent.SearchSubmitted)},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(
-                    items = state.movies,
-                    key = { movie -> movie.id }
-                ) { movie ->
-                    MovieRow(
-                        movie = movie,
-                        onClick = { onMovieClick(movie.id) }
+            Box(modifier = Modifier.fillMaxSize()) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(
+                        items = state.movies,
+                        key = { movie -> movie.id }
+                    ) { movie ->
+                        MovieRow(
+                            movie = movie,
+                            onClick = { onMovieClick(movie.id) }
+                        )
+                    }
+                }
+
+                if (state.isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+
+                state.error?.let {error ->
+                    Text(
+                        text = error.asMessage(),
+                        color = MaterialTheme.colorScheme.error,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(24.dp)
                     )
                 }
             }
-
-            if (state.isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            }
-
-            state.error?.let {error ->
-                Text(
-                    text = error.asMessage(),
-                    color = MaterialTheme.colorScheme.error,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(24.dp)
-                )
-            }
         }
+
     }
 
 }

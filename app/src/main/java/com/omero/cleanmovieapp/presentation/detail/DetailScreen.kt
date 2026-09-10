@@ -33,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.omero.cleanmovieapp.domain.model.MovieDetail
 import com.omero.cleanmovieapp.presentation.components.asMessage
 import com.omero.cleanmovieapp.presentation.components.placeHolderColorFor
+import com.omero.cleanmovieapp.presentation.composable.MoviePoster
 
 @Composable
 fun DetailScreen(
@@ -83,7 +84,7 @@ private fun DetailContent(
                 }
 
                 state.movie != null -> {
-
+                    MovieDetailBody(movie = state.movie)
                 }
             }
         }
@@ -102,18 +103,17 @@ private fun MovieDetailBody(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        Box(
+
+        MoviePoster(
+            posterUrl = movie.poster,
+            title = movie.title,
+            fallbackTextStyle = MaterialTheme.typography.displayLarge,
+            cornerRadius = 12.dp,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(360.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(placeHolderColorFor(movie.title)),
-            contentAlignment = Alignment.Center
-        ) {
-            if (movie.poster != null) {
+                .height(400.dp)
+        )
 
-            }
-        }
     }
 }
 
