@@ -26,11 +26,16 @@ class HomeViewModel @Inject constructor(
     private var job: Job? = null
 
     private companion object {
-        const val DEFAULT_QUERY = "Harry Potter"
+        val STARTER_QUERIES = listOf(
+            "Matrix", "Inception", "Interstellar", "Godfather", "Pulp Fiction",
+            "Fight Club", "Gladiator", "Titanic", "Avatar", "Joker",
+            "Batman", "Alien", "Blade Runner", "Terminator", "Jurassic Park",
+            "Star Wars", "Indiana Jones", "Rocky", "Casino", "Goodfellas"
+        )
     }
 
     init {
-        getMovies(DEFAULT_QUERY)
+        getMovies(STARTER_QUERIES.random())
     }
 
     private fun getMovies(search: String) {
