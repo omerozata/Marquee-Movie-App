@@ -7,5 +7,6 @@ data class HomeState(
     val search: String = "",
     val movies: List<Movie> = emptyList(),
     val isLoading: Boolean = false,
-    val error: AppError? = null
+    val error: AppError? = null,
+    val lastQuery: String? = null
 )

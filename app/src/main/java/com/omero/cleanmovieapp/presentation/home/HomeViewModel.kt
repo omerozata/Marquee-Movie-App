@@ -40,7 +40,7 @@ class HomeViewModel @Inject constructor(
             when(resource) {
 
                 is Resource.Loading -> _state.update {
-                    it.copy(isLoading = true, error = null)
+                    it.copy(isLoading = true, error = null, lastQuery = search)
                 }
 
                 is Resource.Success -> _state.update {
@@ -66,6 +66,15 @@ class HomeViewModel @Inject constructor(
             is HomeEvent.SearchSubmitted -> {
                 val query = _state.value.search.trim()
                 if (query.isNotBlank()) getMovies(query)
+            }
+
+            is HomeEvent.Retry -> {
+                val query = _state.value.lastQuery ?: _state.value.search
+                if (query.isNotBlank()) getMovies(query)
+            }
+
+            is HomeEvent.MessageShown -> _state.update {
+                it.copy(error = null)
             }
 
         }
