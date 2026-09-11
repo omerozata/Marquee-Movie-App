@@ -13,11 +13,24 @@ class MovieRepositoryImpl @Inject constructor(
     private val api: MoviesAPI
 ) : MovieRepository {
 
+    private val EMPTY_RESULT_MESSAGES = listOf(
+        "Movie not found",
+        "Too many results",
+        "Series not found",
+        "Incorrect IMDb ID"
+    )
+    //OMDB Api daha düzgün bir yapı sunsaydı onu kullanmayı tercih ederdim
+    //Eldeki şartlarla bu çözümü üretebildim
+
     override suspend fun getMovies(search: String): List<Movie> {
         val dto = api.getMovies(search)
 
         if (dto.response != "True") {
-            throw ApiException(dto.error ?: "Film bulunamadı")
+            val message = dto.error.orEmpty()
+            val isEmptyResult = EMPTY_RESULT_MESSAGES.any {message.startsWith(it, ignoreCase = true)}
+
+            if (isEmptyResult) return emptyList()
+            throw ApiException(message.ifBlank { "Beklenmeyen Bir Hata Oluştu" })
         }
         return dto.toMovieList()
     }

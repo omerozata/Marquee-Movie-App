@@ -41,6 +41,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.omero.cleanmovieapp.domain.model.MovieDetail
 import com.omero.cleanmovieapp.presentation.components.asMessage
+import com.omero.cleanmovieapp.presentation.composable.ErrorState
 import com.omero.cleanmovieapp.presentation.composable.MoviePoster
 
 @Composable
@@ -54,6 +55,7 @@ fun DetailScreen(
 
     DetailContent(
         state = state,
+        onEvent = viewModel::onEvent,
         onBack = onBack,
         modifier = modifier
     )
@@ -62,6 +64,7 @@ fun DetailScreen(
 @Composable
 private fun DetailContent(
     state: DetailState,
+    onEvent: (DetailEvent) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -81,14 +84,11 @@ private fun DetailContent(
                 }
 
                 state.error != null -> {
-                    Text(
-                        text = state.error.asMessage(),
-                        color = MaterialTheme.colorScheme.error,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.align(Alignment.Center).padding(32.dp)
+                    ErrorState(
+                        message = state.error.asMessage(),
+                        onRetry = {onEvent(DetailEvent.Retry)},
+                        modifier = Modifier.align(Alignment.Center)
                     )
-
-
                 }
 
                 state.movie != null -> {

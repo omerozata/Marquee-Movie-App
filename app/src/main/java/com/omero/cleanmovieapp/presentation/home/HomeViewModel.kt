@@ -73,9 +73,6 @@ class HomeViewModel @Inject constructor(
                 if (query.isNotBlank()) getMovies(query)
             }
 
-            is HomeEvent.MessageShown -> _state.update {
-                it.copy(error = null)
-            }
 
         }
     }

@@ -29,6 +29,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.omero.cleanmovieapp.common.AppError
 import com.omero.cleanmovieapp.presentation.components.asMessage
+import com.omero.cleanmovieapp.presentation.composable.ErrorState
 import com.omero.cleanmovieapp.presentation.composable.MovieRow
 import com.omero.cleanmovieapp.presentation.composable.SearchBar
 
@@ -58,18 +59,7 @@ private fun HomeContent(
     modifier: Modifier = Modifier
 ) {
 
-    val context = LocalContext.current
-    val apiError = state.error as? AppError.Api
-
-    LaunchedEffect(apiError) {
-        if (apiError != null) {
-            Toast.makeText(context, apiError.message, Toast.LENGTH_SHORT).show()
-            onEvent(HomeEvent.MessageShown)
-        }
-    }
-
-
-    Scaffold(modifier = modifier.fillMaxSize()) {padding ->
+      Scaffold(modifier = modifier.fillMaxSize()) {padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
 
             SearchBar(
@@ -95,6 +85,16 @@ private fun HomeContent(
                         )
                     }
 
+                    state.movies.isEmpty() -> {
+                        Text(
+                            text = "Aramanızla eşleşen film bulunamadı",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(32.dp)
+                        )
+                    }
 
                     else -> {
                         LazyColumn(
@@ -121,26 +121,5 @@ private fun HomeContent(
 
 }
 
-@Composable
-private fun ErrorState(
-    message: String,
-    onRetry: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier.padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.error
-        )
-        Spacer(Modifier.height(16.dp))
-        Button(onClick = onRetry) {
-            Text("Tekrar dene")
-        }
-    }
-}
+
 

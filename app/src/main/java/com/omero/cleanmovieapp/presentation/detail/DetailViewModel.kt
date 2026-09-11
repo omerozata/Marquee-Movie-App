@@ -47,4 +47,12 @@ class DetailViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
+
+    fun onEvent(event: DetailEvent) {
+        when (event) {
+            is DetailEvent.Retry -> getMovieDetail(route.movieId)
+        }
+    }
+
+
 }
