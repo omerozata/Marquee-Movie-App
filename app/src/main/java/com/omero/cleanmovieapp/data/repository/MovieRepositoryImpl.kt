@@ -6,6 +6,7 @@ import com.omero.cleanmovieapp.data.remote.dto.toMovieDetailOrNull
 import com.omero.cleanmovieapp.data.remote.dto.toMovieList
 import com.omero.cleanmovieapp.domain.model.Movie
 import com.omero.cleanmovieapp.domain.model.MovieDetail
+import com.omero.cleanmovieapp.domain.model.MoviePage
 import com.omero.cleanmovieapp.domain.repository.MovieRepository
 import javax.inject.Inject
 
@@ -22,17 +23,23 @@ class MovieRepositoryImpl @Inject constructor(
     //OMDB Api daha düzgün bir yapı sunsaydı onu kullanmayı tercih ederdim
     //Eldeki şartlarla bu çözümü üretebildim
 
-    override suspend fun getMovies(search: String): List<Movie> {
-        val dto = api.getMovies(search)
+    override suspend fun getMovies(search: String, page: Int): MoviePage {
+        val dto = api.getMovies(search, page)
 
         if (dto.response != "True") {
             val message = dto.error.orEmpty()
             val isEmptyResult = EMPTY_RESULT_MESSAGES.any {message.startsWith(it, ignoreCase = true)}
 
-            if (isEmptyResult) return emptyList()
+            if (isEmptyResult) {
+                return MoviePage(movies = emptyList(), totalResult = 0, currentPage = page)
+            }
             throw ApiException(message.ifBlank { "Beklenmeyen Bir Hata Oluştu" })
         }
-        return dto.toMovieList()
+        return MoviePage(
+            movies = dto.toMovieList(),
+            totalResult = dto.totalResults?.toIntOrNull() ?: 0,
+            currentPage = page
+        )
     }
 
     override suspend fun getMovieDetails(id: String): MovieDetail {

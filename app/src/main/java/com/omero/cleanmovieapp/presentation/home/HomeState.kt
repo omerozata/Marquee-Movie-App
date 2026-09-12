@@ -8,5 +8,9 @@ data class HomeState(
     val movies: List<Movie> = emptyList(),
     val isLoading: Boolean = false,
     val error: AppError? = null,
-    val lastQuery: String? = null
+    val lastQuery: String? = null,
+    val currentPage: Int = 1,
+    val totalPages: Int = 0,
+    val hasNext: Boolean = false,
+    val hasPrevious: Boolean = false
 )

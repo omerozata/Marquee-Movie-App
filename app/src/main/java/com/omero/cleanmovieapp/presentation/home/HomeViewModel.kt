@@ -38,18 +38,29 @@ class HomeViewModel @Inject constructor(
         getMovies(STARTER_QUERIES.random())
     }
 
-    private fun getMovies(search: String) {
+    private fun getMovies(search: String, page: Int = 1) {
         job?.cancel()
 
-        job = getMoviesUseCase(search).onEach { resource ->
+        job = getMoviesUseCase(search, page).onEach { resource ->
             when(resource) {
 
                 is Resource.Loading -> _state.update {
                     it.copy(isLoading = true, error = null, lastQuery = search)
                 }
 
-                is Resource.Success -> _state.update {
-                    it.copy(isLoading = false, movies = resource.data, error = null)
+                is Resource.Success -> {
+                    val result = resource.data
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            movies = result.movies,
+                            error = null,
+                            currentPage = result.currentPage,
+                            totalPages = result.totalPages,
+                            hasNext = result.hasNext,
+                            hasPrevious = result.hasPrevious
+                        )
+                    }
                 }
 
                 is Resource.Error -> _state.update {
@@ -70,12 +81,22 @@ class HomeViewModel @Inject constructor(
 
             is HomeEvent.SearchSubmitted -> {
                 val query = _state.value.search.trim()
-                if (query.isNotBlank()) getMovies(query)
+                if (query.isNotBlank()) getMovies(query, page = 1)
             }
 
             is HomeEvent.Retry -> {
                 val query = _state.value.lastQuery ?: _state.value.search
-                if (query.isNotBlank()) getMovies(query)
+                if (query.isNotBlank()) getMovies(query, page = _state.value.currentPage)
+            }
+
+            is HomeEvent.NextPage -> {
+                val query = _state.value.lastQuery ?: return
+                if (_state.value.hasNext) getMovies(query, _state.value.currentPage +1)
+            }
+
+            is HomeEvent.PreviousPage -> {
+                val query = _state.value.lastQuery ?: return
+                if (_state.value.hasPrevious) getMovies(query, _state.value.currentPage -1)
             }
 
 

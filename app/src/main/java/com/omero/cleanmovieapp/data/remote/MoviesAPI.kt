@@ -9,7 +9,8 @@ interface MoviesAPI {
 
     @GET(".")
     suspend fun getMovies(
-        @Query("s") search : String
+        @Query("s") search : String,
+        @Query("page") page: Int
     ) : MoviesDTO
 
     @GET(".")
