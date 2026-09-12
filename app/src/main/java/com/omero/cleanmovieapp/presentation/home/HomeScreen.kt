@@ -31,6 +31,7 @@ import com.omero.cleanmovieapp.common.AppError
 import com.omero.cleanmovieapp.presentation.components.asMessage
 import com.omero.cleanmovieapp.presentation.composable.ErrorState
 import com.omero.cleanmovieapp.presentation.composable.MovieRow
+import com.omero.cleanmovieapp.presentation.composable.PaginationBar
 import com.omero.cleanmovieapp.presentation.composable.SearchBar
 
 @Composable
@@ -71,7 +72,7 @@ private fun HomeContent(
                     .padding(16.dp)
             )
 
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 when {
                     state.isLoading -> {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -115,6 +116,18 @@ private fun HomeContent(
                     }
                 }
             }
+
+            if (state.totalPages > 1 && state.error == null) {
+                PaginationBar(
+                    currentPage = state.currentPage,
+                    totalPages = state.totalPages,
+                    hasPrevious = state.hasPrevious,
+                    hasNext = state.hasNext,
+                    onPrevious = {onEvent(HomeEvent.PreviousPage)},
+                    onNext = {onEvent(HomeEvent.NextPage)}
+                )
+            }
+
         }
 
     }
