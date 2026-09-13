@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Clean Movie App"
+rootProject.name = "Marquee"
 include(":app")
