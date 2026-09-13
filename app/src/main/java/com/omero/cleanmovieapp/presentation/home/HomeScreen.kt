@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.omero.cleanmovieapp.common.AppError
 import com.omero.cleanmovieapp.presentation.components.asMessage
 import com.omero.cleanmovieapp.presentation.composable.ErrorState
+import com.omero.cleanmovieapp.presentation.composable.ExitConfirmationHandler
 import com.omero.cleanmovieapp.presentation.composable.MovieRow
 import com.omero.cleanmovieapp.presentation.composable.PaginationBar
 import com.omero.cleanmovieapp.presentation.composable.SearchBar
@@ -131,6 +132,8 @@ private fun HomeContent(
         }
 
     }
+
+    ExitConfirmationHandler()
 
 }
 
