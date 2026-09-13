@@ -90,11 +90,13 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeEvent.NextPage -> {
+                if (_state.value.isLoading) return
                 val query = _state.value.lastQuery ?: return
                 if (_state.value.hasNext) getMovies(query, _state.value.currentPage +1)
             }
 
             is HomeEvent.PreviousPage -> {
+                if (_state.value.isLoading) return
                 val query = _state.value.lastQuery ?: return
                 if (_state.value.hasPrevious) getMovies(query, _state.value.currentPage -1)
             }
