@@ -3,11 +3,12 @@
 OMDb API üzerinden film arama ve detay görüntüleme uygulaması. İleri seviye Android teknolojileri ile hazırlandı. 
 
 <p align="center">
-  <img src="screenshots/moviehome.png" width="30%" />
-  <img src="screenshots/moviehome2.png" width="30%" />
-  <img src="screenshots/moviedetails.png" width="30%" />
+  <img src="screenshots/moviehome.png" width="28%" alt="Ana ekran" />
+  &nbsp;&nbsp;
+  <img src="screenshots/moviehome2.png" width="28%" alt="Arama" />
+  &nbsp;&nbsp;
+  <img src="screenshots/moviedetails.png" width="28%" alt="Film detayı" />
 </p>
-
 
 
 - Data-Domain-Presentation katmanları ayrılarak veri kaynağı soyutlandı.
